@@ -40,7 +40,8 @@ There must be a bunch of students in a similar situation, so I think they could 
 
 ## User Stories:
 - As a user, I want to be able to add expenses to an expense list
-- As a user, I want to be able to create an Expense object that has 2 attributes: price and description
+- As a user, I want to be able to create an Expense object that has 5 attributes:
+  Category, Price, Description, Month, and Day
 - As a user, I want to be able to view a graph of the percentages of each category in respect to my total spending
 - As a user, I want to be able to view a summary of biweekly and monthly expenses
 
