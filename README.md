@@ -44,4 +44,6 @@ There must be a bunch of students in a similar situation, so I think they could 
   Category, Price, Description, Month, and Day
 - As a user, I want to be able to view a graph of the percentages of each category in respect to my total spending
 - As a user, I want to be able to view a summary of biweekly and monthly expenses
+- As a user, I want to be able to have the option to save my Personal Expense List when I exit
+- As a user, I want to be able to have the option of loading my Personal Expense List from file when I start the App
 

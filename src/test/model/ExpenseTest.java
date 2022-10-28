@@ -2,6 +2,9 @@ package model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,7 +22,7 @@ class ExpenseTest {
         testExpense1 = new Expense("Dorm", 90.0, "blanket", 9,14);
         testExpense2 = new Expense("Restaurant", 90.0, "blanket", 10,2);
         testExpense3 = new Expense("Beach", 90.0, "blanket", 10,8);
-        testExpense4 = new Expense("Farm", 90.0, "blanket", 10,17);
+        testExpense4 = new Expense("e", 90.0, "blanket", 10,17);
         testExpense5 = new Expense("Travel", 90.0, "blanket", 11,6);
         testExpenseWrong = new Expense("Holiday", -5, "blanket", 13,-5);
     }
@@ -53,11 +56,22 @@ class ExpenseTest {
         Expense testExpense6 = new Expense("Restaurant", 90.0, "blanket", 10,2);
         assertEquals(0, testExpense2.compareTo(testExpense6));
         assertEquals(-1, testExpense2.compareTo(testExpense5));
+        assertEquals(1, testExpense3.compareTo(testExpense2));
+        assertEquals(-1, testExpense2.compareTo(testExpense3));
     }
 
+    @Test
+    void testSetters() {
+        testExpense1.setCategory("School");
+        assertEquals("School",testExpense1.getCategory());
+        testExpense1.setDescription("hello");
+        assertEquals("hello", testExpense1.getDescription());
+    }
 
-
-
-
+    @Test
+    void testDefaultCategories() {
+        List<String> listTest = testExpense1.getDefaultCategories();
+        assertEquals(9, listTest.size());
+    }
 
 }

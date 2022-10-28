@@ -1,11 +1,16 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//Used JsonSerializationDemo as template for toJson() methods
+
 //Represents an Expense that has 5 attributes: category, price (dollars), description, month, and day
-public class Expense implements Comparable<Expense> {
+public class Expense implements Comparable<Expense>, Writable {
     private static int countNumOfCustomCategories = 0; //tracks # of custom categories created (max is 3)
     private static List<String> defaultCategories =
             new ArrayList<>(Arrays.asList("Groceries", "Dorm", "School", "Restaurant", "Entertainment", "Random"));
@@ -50,9 +55,15 @@ public class Expense implements Comparable<Expense> {
         }
         if (countNumOfCustomCategories < 3) { //max amount of custom categories is 3
             countNumOfCustomCategories++;
-            defaultCategories.add(category);
+            String formatCat = "";
+            if (category.length() > 1) {
+                formatCat = category.substring(0, 1).toUpperCase() + category.substring(1);
+            } else {
+                formatCat = category.toUpperCase();
+            }
+            defaultCategories.add(formatCat);
             //adds custom category to default so if the user repeats that category it will not be counted as custom
-            return category;
+            return formatCat;
         }
         return "Random";
     }
@@ -141,5 +152,16 @@ public class Expense implements Comparable<Expense> {
 
     public List<String> getDefaultCategories() {
         return defaultCategories;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("Category",category);
+        json.put("Price",price);
+        json.put("Description",description);
+        json.put("Month",month);
+        json.put("Day",day);
+        return json;
     }
 }

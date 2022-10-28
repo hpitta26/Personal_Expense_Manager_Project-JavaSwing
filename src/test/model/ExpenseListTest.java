@@ -12,7 +12,7 @@ public class ExpenseListTest {
     void runBefore() {
         expenseListTest = new ExpenseList();
         expenseListTest.addExpense(new Expense("Dorm", 90.0, "blanket", 9,14));
-        expenseListTest.addExpense(new Expense("Restaurant", 10.0, "blanket", 10,2));
+        expenseListTest.addExpense(new Expense("Restaurant", 10.0, "blant", 10,2));
         expenseListTest.addExpense(new Expense("Beach", 10.0, "blanket", 10,8));
         expenseListTest.addExpense(new Expense("Farm", 20.0, "blanket", 10,17));
         expenseListTest.addExpense(new Expense("Travel", 90.0, "blanket", 11,6));
@@ -23,15 +23,14 @@ public class ExpenseListTest {
     void testAddExpense() {
         Expense firstIndexExpense = new Expense("Dorm", 90.0, "blanket", 1,1);
         expenseListTest.addExpense(firstIndexExpense);
-        assertEquals(firstIndexExpense, expenseListTest.getExpenseList().get(0));
+        assertTrue(expenseListTest.getExpenseList().contains(firstIndexExpense));
     }
 
     @Test
     void testAddDayMonth() {
         Expense testExpense = new Expense("Dorm", 90.0, "blanket", 1,13);
         expenseListTest.addExpense(testExpense);
-        assertEquals(true, expenseListTest.getDayMonthTracker().contains(1.13));
-        assertEquals(2, expenseListTest.getDayMonthTracker().indexOf(1.13));
+        assertTrue(expenseListTest.getDayMonthTracker().contains(1.13));
     }
 
     @Test
@@ -73,7 +72,5 @@ public class ExpenseListTest {
             assertEquals(true, expected[i] == actual[i]);
         }
     }
-
-
 
 }

@@ -1,14 +1,21 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//Used JsonSerializationDemo as template for toJson() methods
+
 //Represents a List of Expenses that you can add Expenses to, get Monthly Category Percentages, and Compare Monthly
 // or Biweekly spending.
-public class ExpenseList {
-    private static List<Expense> expenseList = new ArrayList<>(); //List that stores the Expenses
-    private static List<Double> dayMonthTracker =
+public class ExpenseList implements Writable {
+    //private String userName; //Might create a name variable each ExpenseList
+    private List<Expense> expenseList = new ArrayList<>(); //List that stores the Expenses
+    private List<Double> dayMonthTracker =
             new ArrayList<>(Arrays.asList(1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0)); //tracks months.
     /*
      * dayMonthTracker provides a way to quickly find the indexes of Expenses based on their month.day, this helps
@@ -24,7 +31,7 @@ public class ExpenseList {
      */
     public void addExpense(Expense expense) {
         expenseList.add(expense);
-        expenseList.sort(null);
+        //expenseList.sort(null);
         addDayMonth(expense.getMonth(), expense.getDay());
     }
 
@@ -37,7 +44,7 @@ public class ExpenseList {
      */
     public void addDayMonth(int month, int day) { //tracks indices per day/month so I dont have to for-loop to find them
         dayMonthTracker.add(month + ((double)day) / 100);
-        dayMonthTracker.sort(null);
+        //dayMonthTracker.sort(null);
     }
 
     public List<Expense> getExpenseList() {
@@ -59,6 +66,8 @@ public class ExpenseList {
      *          ((month+1)_days1-14)_totalExpenses}, if month==12 then the next month is 1 not 13.
      */
     public double[] getMonthlyOrBiweeklyTotal(int month, boolean isMonthly) {
+        expenseList.sort(null);
+        dayMonthTracker.sort(null);
         double[] threeTermExpenses = new double[3]; //will return 3 terms
         if (isMonthly == true) {
             for (int i = 0; i < 3; i++) {
@@ -145,6 +154,8 @@ public class ExpenseList {
      *          the index of the start of the target month.
      */
     public double[] getCategoryPercentagesPerMonth(int month) {
+        expenseList.sort(null);
+        dayMonthTracker.sort(null);
         double[] categoryPercentage = new double[expenseList.get(0).getDefaultCategories().size()];
         double sum = 0;
         Double thisMonth = (Double)(double)month;
@@ -173,6 +184,21 @@ public class ExpenseList {
         return expenseList.get(j).getCategory().equalsIgnoreCase(expenseList.get(0).getDefaultCategories().get(i));
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("Expense List", expenseListToJson());
+        //json.put("DayMonth Tracker", dayMonthTrackerToJson());
+        return json;
+    }
 
+    //Effects: returns the Expenses in expenseList as a JSONArray
+    public JSONArray expenseListToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Expense expense : expenseList) {
+            jsonArray.put(expense.toJson());
+        }
+        return jsonArray;
+    }
 
 }

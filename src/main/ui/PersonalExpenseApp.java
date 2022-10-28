@@ -1,15 +1,22 @@
 package ui;
 
 import model.*;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 // Represents the PersonalExpenseApp that has an Accessor Expense and ExpenseList as attributes.
 // Allows the user to interact with the console to add Expenses and view summaries.
 public class PersonalExpenseApp {
+    private static final String JSON_STORE = "./data/expenseList.json";
     private ExpenseList expenseList; //List that stores Expenses
     private final Scanner input;
     private Expense accessDefaultValues; //Expense that is used to access the getters and setters of the Expense Class
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     /*
      * REQUIRES:
@@ -20,6 +27,8 @@ public class PersonalExpenseApp {
         expenseList = new ExpenseList();
         input = new Scanner(System.in);
         accessDefaultValues = new Expense("Random", 0,"Accessor",1,1);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runPersonalExpenseApp();
     }
 
@@ -29,13 +38,33 @@ public class PersonalExpenseApp {
      * EFFECTS: Displays the WelcomeScreen/ Tutorial, then continue to run the App until the user inputs exit (0).
      */
     public void runPersonalExpenseApp() {
-        int answer = welcome();
+        int answer = initialScreen();
+        //do you want to load or not, then welcome (if they don't want to load)
+        if (answer == 1) {
+            loadExpenseList();
+        } else if (answer == 2) {
+            answer = welcome();
+        }
 
         while (answer != 0) {
             answer = menu();
         }
 
-        System.out.print("\nThanks for using Personal Expense Manager\nSee you soon!");
+        exitView();
+    }
+
+    //Effects: Asks the user if they want to load a previous Personal Expense List from file or create a new one.
+    //          Returns the int associated with the option they picked.
+    public int initialScreen() {
+        System.out.println("Welcome to your Personal Expense Manager\n");
+        System.out.println("What would you like to?:");
+        System.out.println("(1) Load your Personal Expense List from file.");
+        System.out.println("(2) Create a new Personal Expense List.");
+        System.out.println("(0) Exit.");
+        String question = "Choose an option: ";
+        System.out.print(question);
+        int choice = inputChecker(2, question);
+        return choice;
     }
 
     /*
@@ -45,9 +74,9 @@ public class PersonalExpenseApp {
      * to the expenseList. Returns 0 if the user input exit(0) so that the App can close. Otherwise, returns 1.
      */
     public int welcome() {
-        System.out.println("Welcome to your Personal Expense Manager\n");
+        //System.out.println("Welcome to your Personal Expense Manager\n");
         String question = "Add 1st Expense (1), exit (0): ";
-        System.out.print("What would you like to do?\n" + question);
+        System.out.print("\nLets add your first expense!\n" + question);
         int choice = inputChecker(1, question);
         if (choice == 1) {
             System.out.println("\nGreat!\nExpenses have 5 attributes: Category, Price, Description, Month, and Day.");
@@ -94,6 +123,18 @@ public class PersonalExpenseApp {
             return 1;
         }
         return 0;
+    }
+
+    //Effects: Asks the user whether or not they want to save their Personal Expense List before exiting.
+    public void exitView() {
+        boolean answer;
+        input.nextLine(); //clears any extra input
+        System.out.print("\nWould you like to save your Personal Expense List before going (T)/(F)?: ");
+        answer = trueFalseHelper("Save (T)/(F)?: ");
+        if (answer == true) {
+            saveExpenseList();
+        }
+        System.out.print("\nThanks for using Personal Expense Manager\nSee you soon!");
     }
 
     /*
@@ -296,4 +337,40 @@ public class PersonalExpenseApp {
         }
         return inputNum;
     }
+
+    //Effects: saves ExpenseList to file
+    private void saveExpenseList() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(expenseList);
+            jsonWriter.close();
+            System.out.println("Successfully saved to " + JSON_STORE + "!");
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    //Modifies: this
+    //Effects: loads ExpenseList from file, prints error message if file doesn't exist.
+    private void loadExpenseList() {
+        try {
+            System.out.println("\nLoading Personal Expense List from file...");
+            expenseList = jsonReader.read(); //loads list
+            System.out.println("Successfully loaded from " + JSON_STORE + "!\n");
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE + "\n");
+            //add a return value? To tell the user to create a new expenseList instead.
+        }
+    }
 }
+
+//Ideas:
+//Add return value to loadExpenseList() --> to bring the user to welcome menu if the file does not exist
+//Ask the user if they want to change one of the added default categories (if they are unsatisfied with it)
+//Print the current default categories
+//Add a name to each Personal Expense List (each one can be printed to different files)
+//Print a table of expenses for a month period?
+//Implement LocalDayTime
+//Add money lending a burrowing list to ExpenseList --> track who owes you money and who you owe money to
+//Add a target spending limit per month for each category --> notify the user when they are getting close to it
+//Give the user the option to delete the previous Expense they added --> if they mistyped something
