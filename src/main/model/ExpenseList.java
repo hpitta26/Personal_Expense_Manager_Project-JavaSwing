@@ -13,8 +13,9 @@ import java.util.List;
 //Represents a List of Expenses that you can add Expenses to, get Monthly Category Percentages, and Compare Monthly
 // or Biweekly spending.
 public class ExpenseList implements Writable {
-    //private String userName; //Might create a name variable each ExpenseList
+    private String userName = ""; //Create a name variable each ExpenseList
     private List<Expense> expenseList = new ArrayList<>(); //List that stores the Expenses
+    private List<BorrowLend> borrowLendList = new ArrayList<>();
     private List<Double> dayMonthTracker =
             new ArrayList<>(Arrays.asList(1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0)); //tracks months.
     /*
@@ -22,6 +23,21 @@ public class ExpenseList implements Writable {
      * when the ExpenseList is too long, and you do not want to for-loop through the whole List since it will be very
      * slow.
      */
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return this.userName;
+    }
+
+    //Modified: this
+    //Effects: Adds a borrowLend Object to borrowLendList
+    public void addBorrowLend(BorrowLend borrowLend) {
+        borrowLendList.add(borrowLend);
+        borrowLendList.sort(null);
+    }
 
     /*
      * REQUIRES:
@@ -42,7 +58,7 @@ public class ExpenseList implements Writable {
      *          This allows me to store both pieces of information in a double. So that I can keep track of the indices
      *          of their corresponding Expenses.
      */
-    public void addDayMonth(int month, int day) { //tracks indices per day/month so I dont have to for-loop to find them
+    private void addDayMonth(int month, int day) { //tracks indices per day/month so I dont have to loop to find them
         dayMonthTracker.add(month + ((double)day) / 100);
         //dayMonthTracker.sort(null);
     }
@@ -53,6 +69,17 @@ public class ExpenseList implements Writable {
 
     public List<Double> getDayMonthTracker() {
         return dayMonthTracker;
+    }
+
+    public List<BorrowLend> getBorrowLendList() {
+        return borrowLendList;
+    }
+
+    //Modifies: this
+    //Effects: Removes the last Expense added to expenseList, cannot be after list is sorted
+    public void removeLastExpense() {
+        expenseList.remove(expenseList.size() - 1);
+        dayMonthTracker.remove(dayMonthTracker.size() - 1);
     }
 
     /*
@@ -90,7 +117,7 @@ public class ExpenseList implements Writable {
      *          Uses dayMonthTracker to find the index of the first Expense of the month and adds all the Prices until
      *          the end of the month and returns that value.
      */
-    public double calculateMonthlyExpense(int month) {
+    private double calculateMonthlyExpense(int month) {
         double sum = 0;
         Double thisMonth = (Double)(double)month;
         Double nextMonth = (Double)(double)(month + 1);
@@ -107,7 +134,7 @@ public class ExpenseList implements Writable {
      *          Uses dayMonthTracker to find the index of the first Expense of the month and only adds the value of the
      *          term specified by the boolean isFirstTerm. If true it adds days 1-14, if false then it adds days
      */
-    public double calculateBiweeklyExpenses(int month, boolean isFirstTerm) {
+    private double calculateBiweeklyExpenses(int month, boolean isFirstTerm) {
         double sum = 0;
         Double thisMonth = (Double)(double)month;
         Double nextMonth = (Double)(double)(month + 1);
@@ -132,7 +159,7 @@ public class ExpenseList implements Writable {
      *          Biweekly term is being calculated. Specifies if it's supposed to calculate the totalExpenses for
      *          days 0-14, 15-end_ofMonth, days 0-14 of the next month.
      */
-    public double biweeklyHelper(int month, int count) {
+    private double biweeklyHelper(int month, int count) {
         double sum;
         if (count == 0) {
             sum = calculateBiweeklyExpenses(month, true);
@@ -187,7 +214,9 @@ public class ExpenseList implements Writable {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
+        json.put("User Name", userName);
         json.put("Expense List", expenseListToJson());
+        json.put("BorrowLend List", borrowLendListToJson());
         //json.put("DayMonth Tracker", dayMonthTrackerToJson());
         return json;
     }
@@ -197,6 +226,15 @@ public class ExpenseList implements Writable {
         JSONArray jsonArray = new JSONArray();
         for (Expense expense : expenseList) {
             jsonArray.put(expense.toJson());
+        }
+        return jsonArray;
+    }
+
+    //Effects: returns the BorrowLends in borrowLendList as a JSONArray
+    public JSONArray borrowLendListToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (BorrowLend b : borrowLendList) {
+            jsonArray.put(b.toJson());
         }
         return jsonArray;
     }

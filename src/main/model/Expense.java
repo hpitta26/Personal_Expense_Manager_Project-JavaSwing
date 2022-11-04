@@ -10,16 +10,12 @@ import java.util.List;
 //Used JsonSerializationDemo as template for toJson() methods
 
 //Represents an Expense that has 5 attributes: category, price (dollars), description, month, and day
-public class Expense implements Comparable<Expense>, Writable {
+public class Expense extends PersonalExpenseGeneral implements Writable {
     private static int countNumOfCustomCategories = 0; //tracks # of custom categories created (max is 3)
     private static List<String> defaultCategories =
             new ArrayList<>(Arrays.asList("Groceries", "Dorm", "School", "Restaurant", "Entertainment", "Random"));
     //represents the default categories initially given to the user, the user can only create 3 custom categories
     private String category;        //Expense category
-    private double price;           //Expense price
-    private String description;     //Expense description (what the user bought)
-    private int month;              //Expense month (what month the user bought the item)
-    private int day;                //Expense day (what day the user bought the item)
 
     /*
      * REQUIRES: price >= 0, 0 < month < 13, 0 < day < 31
@@ -30,12 +26,9 @@ public class Expense implements Comparable<Expense>, Writable {
      *          if they are, they are set to 1. Otherwise, they are set to the value specified by the user.
      */
     public Expense(String category, double price, String description, int month, int day) {
+        super(price, description, month, day);
         this.category = checkIfCategoryIsNotDefault(category);
         //will print a message if it set the category to Random, will ask if you want to swap it.
-        setPrice(price);
-        this.description = description;
-        setMonth(month);
-        setDay(day);
     }
 
     /*
@@ -68,67 +61,6 @@ public class Expense implements Comparable<Expense>, Writable {
         return "Random";
     }
 
-    /*
-     * REQUIRES:
-     * MODIFIES:
-     * EFFECTS: Overrides Comparable's method compareTo(Object o) so that a List of Expenses can be sorted solely based
-     *          on their dates.
-     *          Takes in an Expense Object as a parameter and compares this Expense to the one passed in. Expenses
-     *          are compared by month and day so (month=10,day=9 > month=9,day=10). If this Expense has a later date
-     *          than the one passed in the method returns 1, if it has an earlier date it returns -1. If they have the
-     *          same date it returns 0;
-     */
-    @Override //Sorts Expenses by their date
-    public int compareTo(Expense expense) {
-        if (getMonth() > expense.getMonth()) {
-            return 1;
-        } else if (getMonth() < expense.getMonth()) {
-            return -1;
-        } else {
-            if (getDay() > expense.getDay()) {
-                return 1;
-            } else if (getDay() < expense.getDay()) {
-                return -1;
-            }
-        }
-        return 0;
-    }
-
-    public int getMonth() {
-        return this.month;
-    }
-
-    public void setMonth(int month) {
-        if (month < 1 | month > 12) {
-            this.month = 1;
-        } else {
-            this.month = month;
-        }
-    }
-
-    public int getDay() {
-        return this.day;
-    }
-
-    public void setDay(int day) {
-        if (day < 1 | day > 31) {
-            this.day = 1;
-        } else {
-            this.day = day;
-        }
-    }
-
-    public double getPrice() {
-        return this.price;
-    }
-
-    public void setPrice(double price) {
-        if (price < 0) {
-            this.price = 0;
-        } else {
-            this.price = price;
-        }
-    }
 
     public String getCategory() {
         return this.category;
@@ -136,14 +68,6 @@ public class Expense implements Comparable<Expense>, Writable {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getCountNumOfCustomCategories() {
@@ -158,10 +82,10 @@ public class Expense implements Comparable<Expense>, Writable {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("Category",category);
-        json.put("Price",price);
-        json.put("Description",description);
-        json.put("Month",month);
-        json.put("Day",day);
+        json.put("Price", getPrice());
+        json.put("Description",getDescription());
+        json.put("Month",getMonth());
+        json.put("Day",getDay());
         return json;
     }
 }

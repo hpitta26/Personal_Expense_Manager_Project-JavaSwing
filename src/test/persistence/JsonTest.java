@@ -1,5 +1,6 @@
 package persistence;
 
+import model.BorrowLend;
 import model.Expense;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,16 @@ class JsonTest {
         assertEquals(description, expense.getDescription());
         assertEquals(month, expense.getMonth());
         assertEquals(day, expense.getDay());
+    }
+
+    protected void checkBL(String name, double amount, String description, int month, int day, boolean
+            borrowOrLend, BorrowLend borrowLend) {
+        assertEquals(name, borrowLend.getName());
+        assertEquals(amount, borrowLend.getPrice());
+        assertEquals(description, borrowLend.getDescription());
+        assertEquals(month, borrowLend.getMonth());
+        assertEquals(day, borrowLend.getDay());
+        assertEquals(borrowOrLend, borrowLend.getBorrowLend());
     }
 
 }

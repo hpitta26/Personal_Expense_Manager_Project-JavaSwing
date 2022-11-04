@@ -19,7 +19,7 @@ public class JsonWriter {
         this.destination = destination;
     }
 
-    //Effects: opens the writer so it can be used to write to files, throws FileNotFoundException in the case
+    //Effects: opens the writer, so it can be used to write to files, throws FileNotFoundException in the case
     //         the destination cannot be written to.
     public void open() throws FileNotFoundException {
         writer = new PrintWriter(new File(destination));

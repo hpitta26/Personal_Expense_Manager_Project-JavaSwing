@@ -1,5 +1,6 @@
 package persistence;
 
+import model.BorrowLend;
 import model.Expense;
 import model.ExpenseList;
 import org.json.JSONArray;
@@ -43,7 +44,9 @@ public class JsonReader {
     //Effects: Sets the read JSONObject equal to ExpenseList, and returns that ExpenseList.
     private ExpenseList parseExpenseList(JSONObject jsonObject) {
         ExpenseList expenseList = new ExpenseList();
+        expenseList.setUserName(jsonObject.getString("User Name"));
         addExpenseList(expenseList, jsonObject);
+        addBorrowLendList(expenseList, jsonObject);
         return expenseList;
     }
 
@@ -68,5 +71,24 @@ public class JsonReader {
         int day = jsonObject.getInt("Day");
         Expense expense = new Expense(category, price, description, month, day);
         expenseList.addExpense(expense);
+    }
+
+    private void addBorrowLendList(ExpenseList expenseList, JSONObject jsonObject) {
+        JSONArray jsonArray = jsonObject.getJSONArray("BorrowLend List");
+        for (Object json : jsonArray) {
+            JSONObject nextBorrowLend = (JSONObject) json;
+            addBorrowLend(expenseList, nextBorrowLend);
+        }
+    }
+
+    private void addBorrowLend(ExpenseList expenseList, JSONObject jsonObject) {
+        String name = jsonObject.getString("Name");
+        double amount = jsonObject.getDouble("Amount");
+        String description = jsonObject.getString("Description");
+        int month = jsonObject.getInt("Month");
+        int day = jsonObject.getInt("Day");
+        boolean borrowOrLend = jsonObject.getBoolean("BorrowLend");
+        BorrowLend borrowLend = new BorrowLend(name, amount, description, month, day, borrowOrLend);
+        expenseList.addBorrowLend(borrowLend);
     }
 }
