@@ -96,7 +96,7 @@ public class ExpenseList implements Writable {
         expenseList.sort(null);
         dayMonthTracker.sort(null);
         double[] threeTermExpenses = new double[3]; //will return 3 terms
-        if (isMonthly == true) {
+        if (isMonthly) {
             for (int i = 0; i < 3; i++) {
                 threeTermExpenses[i] = calculateMonthlyExpense(month);
                 month = (month == 12) ? 1 : month + 1; //month after 12 is 1, not 13
@@ -198,7 +198,7 @@ public class ExpenseList implements Writable {
             sum = 0;
         }
         return categoryPercentage;
-    }
+    } //add empty list checker (throws exception when list is empty)
 
     /*
      * REQUIRES: j =< 0, i =< 0
