@@ -3,7 +3,10 @@ package ui;
 import model.BorrowLend;
 import model.Expense;
 import model.ExpenseList;
-import ui.exceptions.InvalidInputException;
+import persistence.JsonReader;
+import persistence.JsonWriter;
+import ui.gui.ExpenseTableActionManager;
+import ui.gui.InputChecker;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -11,13 +14,18 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 // Represents the PersonalExpenseApp
 // Allows the user to interact with the GUI to add Expenses and view summaries.
 public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
     private JList list1;
     private JList list2;
-    private ExpenseList expenseList = new ExpenseList();
+    private ExpenseList expenseList;
     private String[] testList;
     private int enterCount = 1;
 
@@ -27,25 +35,23 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
     JPanel borrowLendPanel;
     JPanel textFieldAndButton;
 
-    DefaultTableModel tableEditor;
+    DefaultTableModel tableEditor; //used to edit the Expense Table
+    DefaultTableModel summaryTableEditor; //used to edit the Summary Table
     JTable expenseTable;
     JTextField textField;
-    JComboBox<String> comboBox;
+    JComboBox<String> comboBox; //Add Expense or BorrowLend
     JLabel questionLabel; //replace this with HintText
+
+    //Helper classes
     InputChecker inputChecker;
+    ExpenseTableActionManager actionManagerTable;
 
-    JLabel dayOutputTest;
-    JLabel descriptionOutputTest;
-    JLabel priceOutputTest;
-    JLabel categoryOutputTest;
-    JLabel monthOutputTest;
+    JLabel[] testLabelArray; //day, description, price, category, month
 
-    private String category;
-    private double price;
-    private String description;
-    private int month;
-    private int day;
-
+    private static final String JSON_STORE = "./data/expenseListGUI.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+    private int loadCount;
 
     //EFFECTS: initializes the GUI
     public PersonalExpenseAppGUI() {
@@ -54,9 +60,14 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         //setLocation(1, 1);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        expenseList = new ExpenseList();
 
         screen = this.getContentPane();
         screen.setLayout(new BorderLayout(0, 0));
+
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+        loadCount = 0;
 
         createMonthPanel();
 
@@ -64,6 +75,8 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
 
         createBorrowLendPanel();
         inputChecker = new InputChecker(textField, questionLabel);
+        actionManagerTable =  new ExpenseTableActionManager(questionLabel, testLabelArray, textField, expenseList,
+                tableEditor, summaryTableEditor);
 
         setVisible(true); //allows the contents to be seen, must be at the end of the constructor, or main method
     }
@@ -87,7 +100,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
     public void createExpenseListPanel() {
         expenseListPanel = new JPanel();
         expenseListPanel.setLayout(new GridBagLayout());
-        addJTable(); //Adds ExpenseListTable
+        addExpenseJTable(); //Adds ExpenseListTable
         helpCreateTextFieldAndComboBox(); //Adds ComboBox and TextField
 
         screen.add(expenseListPanel, BorderLayout.CENTER); //Add expenseListPanel to screen.CENTER
@@ -95,21 +108,33 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
 
     //EFFECTS: Creates the JTable that will display the Expenses to the User
     //MODIFIES: this
-    public void addJTable() {
+    public void addExpenseJTable() {
         //create and customize JTable here
         GridBagConstraints gbc2 = new GridBagConstraints();
         String[] colNames = new String[] {"Month/Day", "Description", "Price", "Category"};
         tableEditor = new DefaultTableModel(colNames, 0);
         expenseTable = new JTable(tableEditor);
-        expenseTable.setShowGrid(true);
-        expenseTable.setGridColor(new Color(000));
-        expenseTable.getTableHeader().setFont(new Font("Monospaced", Font.PLAIN, 13));
-        expenseTable.setRowHeight(20);
+
+        configureJTable();
+
         JScrollPane scrollPaneExpenses = new JScrollPane(expenseTable);
         scrollPaneExpenses.setPreferredSize(new Dimension(730, 570));
         gbc2.gridy = 0;
         expenseListPanel.add(scrollPaneExpenses, gbc2); //Add Expense List @ row 0
-        //Implement table with different column widths, day = much shorter
+    }
+
+    public void configureJTable() {
+        expenseTable.setShowGrid(true);
+        expenseTable.setGridColor(new Color(000));
+        expenseTable.getTableHeader().setFont(new Font("Monospaced", Font.PLAIN, 13));
+        expenseTable.setRowHeight(20);
+        expenseTable.getColumnModel().getColumn(0).setPreferredWidth(100);
+        expenseTable.getColumnModel().getColumn(1).setPreferredWidth(400);
+        expenseTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+        expenseTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+        for (int i = 1; i < 31; i++) {
+            tableEditor.addRow(new Object[] {i, "", "", ""});
+        }
     }
 
     //EFFECTS: helper method to help add the ComboBox and TextField to the expenseListPanel
@@ -143,45 +168,55 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
     public void helpCreateTextFieldButtonPanel() {
         textFieldAndButton = new JPanel();
         textFieldAndButton.setLayout(new FlowLayout());
-        textField = new JTextField("Hello");
+        textField = new JTextField("Hello type input here");
         textField.setBorder(new EtchedBorder());
-        textField.setPreferredSize(new Dimension(730, 30));
+        textField.setPreferredSize(new Dimension(630, 30));
         textField.setActionCommand("TextFieldEnter");
         textField.addActionListener(this);
         textFieldAndButton.add(textField);
 
-//        JButton button1 = new JButton("Enter");
-//        //button1.setBorder(new EtchedBorder());
-//        button1.setPreferredSize(new Dimension(100,30));
-//        button1.setActionCommand("EnterButton");
-//        button1.addActionListener(this); //actionPerformed is called everytime the button is clicked
-//        textFieldAndButton.add(button1);
+        JButton resetButton = new JButton("Reset");
+        //button1.setBorder(new EtchedBorder());
+        resetButton.setPreferredSize(new Dimension(100,30));
+        resetButton.setActionCommand("ResetButton");
+        resetButton.addActionListener(this); //actionPerformed is called everytime the button is clicked
+        textFieldAndButton.add(resetButton);
     }
 
+    //EFFECTS: creates JPanel for the Labels that will display the user inputs for testing (will change later)
+    //MODIFIES: this
     public JPanel helpAddTestLabels() {
         JPanel testLabels = new JPanel();
         testLabels.setLayout(new FlowLayout());
-        dayOutputTest = new JLabel("Day: "); //Change this to a slider for each month
-        dayOutputTest.setPreferredSize(new Dimension(130, 20));
+        JLabel dayOutputTest = new JLabel("Day: ");
+        JLabel descriptionOutputTest = new JLabel("Description: ");
+        JLabel priceOutputTest = new JLabel("Price: ");
+        JLabel categoryOutputTest = new JLabel("Category: ");
+        JLabel monthOutputTest = new JLabel("Month: Only 11");
 
-        descriptionOutputTest = new JLabel("Description: "); //Change this to a slider for each month
-        descriptionOutputTest.setPreferredSize(new Dimension(130, 20));
+        labelStyleSetter(dayOutputTest);
+        labelStyleSetter(descriptionOutputTest);
+        labelStyleSetter(priceOutputTest);
+        labelStyleSetter(categoryOutputTest);
+        labelStyleSetter(monthOutputTest);
 
-        priceOutputTest = new JLabel("Price: "); //Change this to a slider for each month
-        priceOutputTest.setPreferredSize(new Dimension(130, 20));
-
-        categoryOutputTest = new JLabel("Category: "); //Change this to a slider for each month
-        categoryOutputTest.setPreferredSize(new Dimension(130, 20));
-
-        monthOutputTest = new JLabel("Month: "); //Change this to a slider for each month
-        monthOutputTest.setPreferredSize(new Dimension(130, 20));
         testLabels.add(dayOutputTest);
         testLabels.add(descriptionOutputTest);
         testLabels.add(priceOutputTest);
         testLabels.add(categoryOutputTest);
         testLabels.add(monthOutputTest);
+        testLabelArray = new JLabel[] {dayOutputTest, descriptionOutputTest, priceOutputTest, categoryOutputTest,
+                monthOutputTest};
         return testLabels;
     }
+
+    //EFFECTS: changes the style of the JLabel
+    //MODIFIES: this
+    public void labelStyleSetter(JLabel label) {
+        label.setPreferredSize(new Dimension(143,20));
+        label.setBorder(new EtchedBorder());
+    }
+
 
     //EFFECTS: Creates the borrowLendPanel and places it at screen.EAST
     //MODIFIES: this
@@ -192,7 +227,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         JLabel blTitle = new JLabel("Borrow/ Lend");
         blTitle.setFont(new Font("Monospaced", Font.PLAIN, 13));
         blTitle.setSize(250, 50);
-        gbc.gridy = 0;
+        gbc.gridy = 0; //Adds BorrowLend Title @ row 0
         gbc.fill = GridBagConstraints.HORIZONTAL;
         blTitle.setBorder(new EtchedBorder());
         borrowLendPanel.add(blTitle, gbc);
@@ -200,10 +235,90 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         DefaultListModel<BorrowLend> listModel = createListModel();
         list2 = new JList(listModel);
         JScrollPane scrollPaneBL = new JScrollPane(list2);
-        scrollPaneBL.setPreferredSize(new Dimension(250, 400));
-        gbc.gridy = 1;
+        scrollPaneBL.setPreferredSize(new Dimension(250, 300));
+        gbc.gridy = 1; //Adds BorrowLend Panel @ row 1
         borrowLendPanel.add(scrollPaneBL, gbc);
+
+        addSummaryJTable(); //Adds summaryTable @ row 2
+
+        addLoadSaveButtons();
+
         screen.add(borrowLendPanel, BorderLayout.EAST); //Add EAST
+
+    }
+
+    public void addLoadSaveButtons() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        JPanel loadSave = new JPanel();
+        loadSave.setPreferredSize(new Dimension(250, 50));
+        loadSave.setLayout(new FlowLayout());
+
+        JLabel summaryTitle = new JLabel(" ");
+        summaryTitle.setSize(250, 50);
+        gbc.gridy = 4;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        gbc.anchor = GridBagConstraints.SOUTH;
+//        gbc.weighty = 5;
+        borrowLendPanel.add(summaryTitle, gbc); //Creates a gap between Panels
+
+        JButton saveButton = new JButton("Save");
+        saveButton.setActionCommand("SaveButton");
+        saveButton.addActionListener(this);
+        JButton loadButton = new JButton("Load");
+        loadButton.setActionCommand("LoadButton");
+        loadButton.addActionListener(this);
+        gbc.gridy = 5;
+        loadSave.add(saveButton);
+        loadSave.add(loadButton);
+        borrowLendPanel.add(loadSave, gbc);
+    }
+
+    //EFFECTS: Creates the JTable that will display the MonthExpenseSummary to the User
+    //MODIFIES: this
+    public void addSummaryJTable() {
+        //create and customize JTable here
+        GridBagConstraints gbc2 = new GridBagConstraints();
+
+        JLabel summaryTitle = new JLabel(" ");
+        //summaryTitle.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        summaryTitle.setSize(250, 50);
+        gbc2.gridy = 2;
+        gbc2.fill = GridBagConstraints.HORIZONTAL;
+        //summaryTitle.setBorder(new EtchedBorder());
+        borrowLendPanel.add(summaryTitle, gbc2); //Creates a gap between Panels
+
+        String[] colNames = new String[] {"Category", "Total", "Percent"};
+        summaryTableEditor = new DefaultTableModel(colNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return false; //Only Custom Category Cells can be edited
+            }
+        };
+        JTable summaryTable = new JTable(summaryTableEditor);
+        summaryTable.setShowGrid(true);
+        summaryTable.setGridColor(new Color(000));
+        summaryTable.getTableHeader().setFont(new Font("Monospaced", Font.PLAIN, 13));
+        summaryTable.setRowHeight(20);
+        JScrollPane scrollPaneSummary = new JScrollPane(summaryTable);
+        scrollPaneSummary.setPreferredSize(new Dimension(250, 243));
+        gbc2.gridy = 3;
+        addInitialCategoryNamesToTable(); //adds default values to the table
+        borrowLendPanel.add(scrollPaneSummary, gbc2); //Add Summary @ row 3
+    }
+
+    //EFFECTS: Adds the default values to the summaryTable.
+    //MODIFIES: this
+    public void addInitialCategoryNamesToTable() {
+        List<String> defaultCat =
+                new ArrayList<>(Arrays.asList("Groceries", "Dorm", "School", "Restaurant", "Entertainment", "Random"));
+        for (int i = 0; i < defaultCat.size(); i++) {
+            summaryTableEditor.addRow(new Object[] {defaultCat.get(i), "$" + 0.0, 0.0 + "%"});
+        }
+        summaryTableEditor.addRow(new Object[] {"Custom 1", "$" + 0.0, 0.0 + "%"});
+        summaryTableEditor.addRow(new Object[] {"Custom 2", "$" + 0.0, 0.0 + "%"});
+        summaryTableEditor.addRow(new Object[] {"Custom 3", "$" + 0.0, 0.0 + "%"});
+        summaryTableEditor.addRow(new Object[] {"", "", ""});
+        summaryTableEditor.addRow(new Object[] {"Total", "$" + 0.0, 0.0 + "%"});
     }
 
     //EFFECTS: Creates a ModelList to be passed as a parameter for the Borrow/Lend JList
@@ -224,10 +339,9 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         return listModel;
     }
 
-    //EFFECTS: Adds expenses to the ExpenseList for testing
+    //EFFECTS: Adds expenses to the ExpenseList for *testing*
     //MODIFIES: this
     public void addExpenses() {
-        //expenseList = new ExpenseList();
         Expense e1 = new Expense("school", 50, "hi", 10, 12);
         Expense e2 = new Expense("school", 50, "hi", 10, 13);
         Expense e3 = new Expense("school", 50, "hi", 10, 14);
@@ -238,138 +352,55 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         expenseList.addExpense(e4);
     }
 
-    //EFFECTS: Performs an action everytime the button is clicked
+    //EFFECTS: Performs an action everytime an action is performed
     //MODIFIES: this
     @Override
     public void actionPerformed(ActionEvent action) {
         //BL = 6 attributes, Expense = 5.
-        String defaultString = "Current Input: ";
         if (action.getActionCommand().equals("TextFieldEnter")) {
-            textFieldActionHelper();
+            actionManagerTable.actionManagerRunner();
         }
-
-        if (enterCount == 6) {
-            //call remove expense before adding
-            try {
-                boolean answer = helpRemoveObject(true);
-                if (answer) {
-                    expenseList.addExpense(new Expense(category, price, description, month, day));
-                    Object[] attributes = new Object[] {month + "/" + day, description, price, category};
-                    tableEditor.addRow(attributes);
-                }
-                resetTestLabels();
-                enterCount = 1;
-            } catch (InvalidInputException e) {
-                //nothing
-            }
+        if (action.getActionCommand().equals("ResetButton")) {
+            actionManagerTable.resetPanel();
         }
-
-    }
-
-    public void textFieldActionHelper() {
-
-        switch (enterCount) {
-            case 1:
-                //Ask for Day
-                dayHelper();
-                break;
-            case 2:
-                //Ask for Description
-                descriptionHelper();
-                break;
-            case 3:
-                //Ask for Price
-                priceHelper();
-                break;
-            case 4:
-                //Ask for Category
-                categoryHelper();
-                break;
-            case 5:
-                //Ask for Month
-                monthHelper();
-                break;
+        if (action.getActionCommand().equals("SaveButton")) {
+            saveExpenseList();
+        }
+        if (action.getActionCommand().equals("LoadButton")) {
+            loadExpenseList();
         }
     }
 
-    public void dayHelper() {
+    //Effects: saves ExpenseList to file
+    private void saveExpenseList() {
         try {
-            day = inputChecker.dayInputChecker();
-            questionLabel.setText("Current Input: Description");
-            dayOutputTest.setText(Integer.toString(day));
-            enterCount++;
-        } catch (InvalidInputException e) {
-            questionLabel.setText("Current Input: Day (Previous Input was Invalid)");
+            jsonWriter.open();
+            jsonWriter.write(expenseList);
+            jsonWriter.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.exit(1); //change this, Add JLabel to display if it was added successfully or not
         }
-        textField.setText("");
-    }
-
-    public void descriptionHelper() {
-        description = textField.getText();
-        questionLabel.setText("Current Input: Price");
-        descriptionOutputTest.setText(description);
-        enterCount++;
-        textField.setText("");
-    }
-
-    public void priceHelper() {
-        try {
-            price = inputChecker.priceInputChecker();
-            questionLabel.setText("Current Input: Category");
-            priceOutputTest.setText(Double.toString(price));
-            enterCount++;
-        } catch (InvalidInputException e) {
-            questionLabel.setText("Current Input: Price (Previous Input was Invalid)");
-        }
-        textField.setText("");
-    }
-
-    public void categoryHelper() {
-        category = textField.getText();
-        questionLabel.setText("Current Input: Month");
-        categoryOutputTest.setText(category);
-        enterCount++;
-        textField.setText("");
-    }
-
-    public void monthHelper() {
-        try {
-            month = inputChecker.monthInputChecker();
-            //questionLabel.setText("Current Input: Day");
-            questionLabel.setText("Are you sure you want to add this Expense (T)/(F)?");
-            monthOutputTest.setText(Integer.toString(month));
-            enterCount++;
-        } catch (InvalidInputException e) {
-            questionLabel.setText("Current Input: Month (Previous Input was Invalid)");
-        }
-        textField.setText("");
     }
 
     //Modifies: this
-    //Effects: Asks the user if they mistyped the previous Item, if they did it removes that Item from its respective
-    //         list.
-    public boolean helpRemoveObject(boolean expenseOrBorrow) throws InvalidInputException {
-        boolean answer;
-        try {
-            answer = inputChecker.trueFalseChecker();
-            questionLabel.setText("Current Input: Day");
-        } catch (InvalidInputException e) {
-            questionLabel.setText("Are you sure you want to add this Expense (T)/(F)?");
-            textField.setText("");
-            throw new InvalidInputException("Invalid TrueOrFalse");
+    //Effects: loads ExpenseList from file, prints error message if file doesn't exist.
+    private void loadExpenseList() {
+        if (loadCount == 0) {
+            try {
+                expenseList = jsonReader.read(); //loads list breaks ExpenseTableActionManager's reference
+                actionManagerTable.setExpenseList(expenseList); //updates the reference
+                for (Expense e : expenseList.getExpenseList()) {
+                    actionManagerTable.addExpenseRestore(e.getCategory(), e.getPrice(), e.getDescription(),
+                            e.getMonth(), e.getDay());
+                }
+            } catch (IOException e) {
+                //create a JLabel to display some text
+            }
+            actionManagerTable.updateSummaryTable();
         }
-        textField.setText("");
-        return answer;
+        loadCount++;
     }
-
-    public void resetTestLabels() {
-        dayOutputTest.setText("Day: ");
-        descriptionOutputTest.setText("Description: ");
-        priceOutputTest.setText("Price: ");
-        monthOutputTest.setText("Month: ");
-        categoryOutputTest.setText("Category: ");
-    }
-
 
     //EFFECTS: runs the application
     public static void main(String[] args) {

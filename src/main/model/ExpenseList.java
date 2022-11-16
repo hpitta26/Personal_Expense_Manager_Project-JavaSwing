@@ -200,6 +200,33 @@ public class ExpenseList implements Writable {
         return categoryPercentage;
     } //add empty list checker (throws exception when list is empty)
 
+
+    /*
+     * REQUIRES: 0 < month < 13
+     * MODIFIES:
+     * EFFECTS: Takes in a month and returns a double[] which stores the total spending of each category
+     *          in that month. Uses dayMonthTracker to quickly access the index of the start of the target month.
+     */
+    public double[] getCategoryTotalPerMonth(int month) {
+        expenseList.sort(null);
+        dayMonthTracker.sort(null);
+        double[] categoryTotal = new double[expenseList.get(0).getDefaultCategories().size()];
+        double sum = 0;
+        Double thisMonth = (Double)(double)month;
+        Double nextMonth = (Double)(double)(month + 1);
+        for (int i = 0; i < categoryTotal.length; i++) {
+            for (int j = dayMonthTracker.indexOf(thisMonth) + 1; j < dayMonthTracker.indexOf(nextMonth); j++) {
+                if (categoryComparator(j - month, i)) {
+                    sum = sum + expenseList.get(j - month).getPrice(); // -month to recalibrate the index
+                }
+            }
+            categoryTotal[i] = sum;
+            sum = 0;
+        }
+        return categoryTotal;
+    } //add empty list checker (throws exception when list is empty)
+
+
     /*
      * REQUIRES: j =< 0, i =< 0
      * MODIFIES:
@@ -217,7 +244,6 @@ public class ExpenseList implements Writable {
         json.put("User Name", userName);
         json.put("Expense List", expenseListToJson());
         json.put("BorrowLend List", borrowLendListToJson());
-        //json.put("DayMonth Tracker", dayMonthTrackerToJson());
         return json;
     }
 

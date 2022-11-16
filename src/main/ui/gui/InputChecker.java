@@ -1,4 +1,4 @@
-package ui;
+package ui.gui;
 
 import ui.exceptions.InvalidInputException;
 
