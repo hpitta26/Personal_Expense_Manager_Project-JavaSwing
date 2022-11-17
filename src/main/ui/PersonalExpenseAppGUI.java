@@ -3,6 +3,20 @@ package ui;
 import model.BorrowLend;
 import model.Expense;
 import model.ExpenseList;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.title.TextTitle;
+import org.jfree.chart.ui.HorizontalAlignment;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.RectangleInsets;
+import org.jfree.chart.ui.VerticalAlignment;
+import org.jfree.data.category.DefaultCategoryDataset;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.gui.ExpenseTableActionManager;
@@ -16,6 +30,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +57,9 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
     JComboBox<String> comboBox; //Add Expense or BorrowLend
     JLabel questionLabel; //replace this with HintText
 
+    JPanel summaryGraphPanel; //used to contain the summary graphs
+    DefaultCategoryDataset monthDataForGraphs; //data used for Graphs - remove this
+
     //Helper classes
     InputChecker inputChecker;
     ExpenseTableActionManager actionManagerTable;
@@ -56,7 +74,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
     //EFFECTS: initializes the GUI
     public PersonalExpenseAppGUI() {
         super("Personal Expense Manager");
-        setSize(1000,800);
+        setSize(1250,800); //ExpenseList Panel 730 + Right Panel 250 (prev width 1000)
         //setLocation(1, 1);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,9 +92,12 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         createExpenseListPanel();
 
         createBorrowLendPanel();
+
         inputChecker = new InputChecker(textField, questionLabel);
         actionManagerTable =  new ExpenseTableActionManager(questionLabel, testLabelArray, textField, expenseList,
-                tableEditor, summaryTableEditor);
+                tableEditor, summaryTableEditor, screen);
+
+        actionManagerTable.createSummaryGraphsPanel(new int[] {11,10,9}, true);
 
         setVisible(true); //allows the contents to be seen, must be at the end of the constructor, or main method
     }
@@ -112,7 +133,12 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         //create and customize JTable here
         GridBagConstraints gbc2 = new GridBagConstraints();
         String[] colNames = new String[] {"Month/Day", "Description", "Price", "Category"};
-        tableEditor = new DefaultTableModel(colNames, 0);
+        tableEditor = new DefaultTableModel(colNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            } //no cells are editable right now
+        };
         expenseTable = new JTable(tableEditor);
 
         configureJTable();
@@ -233,7 +259,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         borrowLendPanel.add(blTitle, gbc);
 
         DefaultListModel<BorrowLend> listModel = createListModel();
-        list2 = new JList(listModel);
+        list2 = new JList(listModel); //Creates new list with the ListModel
         JScrollPane scrollPaneBL = new JScrollPane(list2);
         scrollPaneBL.setPreferredSize(new Dimension(250, 300));
         gbc.gridy = 1; //Adds BorrowLend Panel @ row 1
@@ -397,7 +423,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
             } catch (IOException e) {
                 //create a JLabel to display some text
             }
-            actionManagerTable.updateSummaryTable();
+            actionManagerTable.updateApplication();
         }
         loadCount++;
     }

@@ -1,11 +1,53 @@
 {
     "Expense List": [
         {
+            "Month": 9,
+            "Category": "school",
+            "Description": "hi",
+            "Price": 75,
+            "Day": 11
+        },
+        {
+            "Month": 9,
+            "Category": "restaurant",
+            "Description": "hello",
+            "Price": 150,
+            "Day": 26
+        },
+        {
+            "Month": 9,
+            "Category": "dorm",
+            "Description": "hi",
+            "Price": 40,
+            "Day": 26
+        },
+        {
+            "Month": 10,
+            "Category": "entertainment",
+            "Description": "hi",
+            "Price": 30,
+            "Day": 1
+        },
+        {
+            "Month": 10,
+            "Category": "dorm",
+            "Description": "hi",
+            "Price": 40,
+            "Day": 11
+        },
+        {
             "Month": 11,
             "Category": "restaurant",
             "Description": "hi",
             "Price": 150,
             "Day": 1
+        },
+        {
+            "Month": 11,
+            "Category": "school",
+            "Description": "hi",
+            "Price": 78,
+            "Day": 10
         },
         {
             "Month": 11,
