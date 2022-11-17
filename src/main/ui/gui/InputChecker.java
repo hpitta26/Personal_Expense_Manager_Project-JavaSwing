@@ -4,12 +4,14 @@ import ui.exceptions.InvalidInputException;
 
 import javax.swing.*;
 
-//Used to check if the User's Input is valid for each category
+//Class used to check if the User's Input is valid for each category
 public class InputChecker {
     JTextField textField;
     JLabel questionLabel;
     //String userInput;
 
+    //EFFECTS: Initializes InputChecker with a reference of the App's TextField and Label
+    //MODIFIES:
     public InputChecker(JTextField textField, JLabel label) {
         //this.textField = textField;
         this.questionLabel = label;

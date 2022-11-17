@@ -58,7 +58,7 @@ public class ExpenseList implements Writable {
      *          This allows me to store both pieces of information in a double. So that I can keep track of the indices
      *          of their corresponding Expenses.
      */
-    private void addDayMonth(int month, int day) { //tracks indices per day/month so I dont have to loop to find them
+    private void addDayMonth(int month, int day) { //tracks indices per day/month, so I don't have to loop to find them
         dayMonthTracker.add(month + ((double)day) / 100);
         //dayMonthTracker.sort(null);
     }
@@ -78,6 +78,7 @@ public class ExpenseList implements Writable {
     //Modifies: this
     //Effects: Removes the last Expense added to expenseList, cannot be after list is sorted
     public void removeLastExpense() {
+        //Change so that it can remove the last Expense even after sorting, or remove a specific expense
         expenseList.remove(expenseList.size() - 1);
         dayMonthTracker.remove(dayMonthTracker.size() - 1);
     }

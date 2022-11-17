@@ -51,3 +51,15 @@ There must be a bunch of students in a similar situation, so I think they could 
 - As a user, I want to be able to have the option to save my Personal Expense List when I exit
 - As a user, I want to be able to have the option of loading my Personal Expense List from file when I start the App
 
+## Instructions for Grader:
+- You can generate the first required event related to adding Xs to a Y by: adding a new Expense through the TextField and the 
+  MonthSummaryTable will automatically update. This is because is this is a Personal Expense App and the user should 
+  always be able to see summary/ comparison Statistics.
+- You can generate the second required event related to adding Xs to a Y by: adding a new Expense through the TextField and the
+  ComparisonGraphs will automatically update. This is because is this is a Personal Expense App and the user should
+  always be able to see summary/ comparison Statistics.
+- You can locate my visual component by: the ComparisonGraphs are always on the left of the screen and will automatically 
+  update when you add new Expenses.
+- You can save the state of my application by: clicking the "Save" button in the bottom right corner.
+- You can reload the state of my application by: clicking the "Load" button in the bottom right corner.
+

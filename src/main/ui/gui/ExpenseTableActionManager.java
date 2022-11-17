@@ -287,40 +287,38 @@ public class ExpenseTableActionManager {
 
     //EFFECTS: creates the summary graphs and adds it to screen.WEST
     //MODIFIES: this
-    public void createSummaryGraphsPanel(int[] months, boolean firstRender) {
+    public void createSummaryGraphsPanel(int[] months) {
         summaryGraphPanel = new JPanel(new FlowLayout());
         summaryGraphPanel.setPreferredSize(new Dimension(250, 750));
 
-        generateGraph("November", true, 1, 260, monthOneGraph, 0); //height 260
-        generateGraph("October", false, 0, 200, monthTwoGraph, 1); //height 200
-        generateGraph("September", false, 0, 200, monthThreeGraph, 2); //height 200
+        generateGraph("November", true, 1, 260, 0); //height 260
+        generateGraph("October", false, 0, 200, 1); //height 200
+        generateGraph("September", false, 0, 200, 2); //height 200
 
         screen.add(summaryGraphPanel, BorderLayout.WEST);
     }
 
     //EFFECTS: configures the graphs to the correct layout and adds then to the summaryChartPanel
     //MODIFIES: this
-    public void generateGraph(String titleMonth, boolean isFirstGraph, int titleIndex, int height,
-                              JFreeChart monthGraph, int graphNum) {
+    public void generateGraph(String titleMonth, boolean isFirstGraph, int titleIndex, int height, int graphNum) {
         //Makes sure that the correct graph and DefaultCategoryDataset are being used
+        JFreeChart monthGraph;
+
         if (graphNum == 0) {
             monthDataForGraphs = new DefaultCategoryDataset();
             generateDefaultGraphValues(monthDataForGraphs);
-            monthGraph = ChartFactory.createBarChart("", "",
-                    "", monthDataForGraphs, PlotOrientation.VERTICAL, isFirstGraph, true,
-                    false);
+            monthGraph = ChartFactory.createBarChart("", "", "",
+                    monthDataForGraphs, PlotOrientation.VERTICAL, isFirstGraph, true, false);
         } else if (graphNum == 1) {
             monthTwoDataForGraphs = new DefaultCategoryDataset();
             generateDefaultGraphValues(monthTwoDataForGraphs);
-            monthGraph = ChartFactory.createBarChart("", "",
-                    "", monthTwoDataForGraphs, PlotOrientation.VERTICAL, isFirstGraph, true,
-                    false);
+            monthGraph = ChartFactory.createBarChart("", "", "",
+                    monthTwoDataForGraphs, PlotOrientation.VERTICAL, isFirstGraph, true, false);
         } else {
             monthThreeDataForGraphs = new DefaultCategoryDataset();
             generateDefaultGraphValues(monthThreeDataForGraphs);
-            monthGraph = ChartFactory.createBarChart("", "",
-                    "", monthThreeDataForGraphs, PlotOrientation.VERTICAL, isFirstGraph, true,
-                    false);
+            monthGraph = ChartFactory.createBarChart("", "", "",
+                    monthThreeDataForGraphs, PlotOrientation.VERTICAL, isFirstGraph, true, false);
         }
 
         configureChartLayout(monthGraph, isFirstGraph, titleIndex, titleMonth); //configure the layout

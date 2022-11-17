@@ -36,11 +36,39 @@
             "Day": 11
         },
         {
+            "Month": 10,
+            "Category": "groceries",
+            "Description": "hi",
+            "Price": 30,
+            "Day": 11
+        },
+        {
             "Month": 11,
             "Category": "restaurant",
             "Description": "hi",
             "Price": 150,
             "Day": 1
+        },
+        {
+            "Month": 11,
+            "Category": "Beach",
+            "Description": "hi",
+            "Price": 100,
+            "Day": 3
+        },
+        {
+            "Month": 11,
+            "Category": "entertainment",
+            "Description": "hi",
+            "Price": 30,
+            "Day": 7
+        },
+        {
+            "Month": 11,
+            "Category": "beach",
+            "Description": "hi",
+            "Price": 30,
+            "Day": 9
         },
         {
             "Month": 11,

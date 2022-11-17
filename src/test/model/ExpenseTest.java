@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -72,6 +73,18 @@ class ExpenseTest {
     void testDefaultCategories() {
         List<String> listTest = testExpense1.getDefaultCategories();
         assertEquals(9, listTest.size());
+    }
+
+    @Test
+    void testToJson() {
+        Expense e = new Expense("Dorm", 90, "hi", 9, 14);
+
+        JSONObject json1 = e.toJson();
+        assertEquals("Dorm", json1.getString("Category"));
+        assertEquals(90, json1.getDouble("Price"));
+        assertEquals("hi", json1.getString("Description"));
+        assertEquals(9, json1.getInt("Month"));
+        assertEquals(14, json1.getInt("Day"));
     }
 
 }

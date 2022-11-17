@@ -1,6 +1,6 @@
 package ui;
 
-//Represents whole app
+//Represents whole app, can Run App with multiple views that change dynamically
 public class RunnerGUI {
 
     public RunnerGUI() {

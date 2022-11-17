@@ -1,11 +1,13 @@
 package model;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class BorrowLendTest {
     private BorrowLend testBorrowLend1;
@@ -60,6 +62,27 @@ class BorrowLendTest {
         assertEquals(-1, testBorrowLend2.compareTo(testBorrowLend5));
         assertEquals(1, testBorrowLend3.compareTo(testBorrowLend2));
         assertEquals(-1, testBorrowLend2.compareTo(testBorrowLend3));
+    }
+
+    @Test
+    void testGettersAndSetters() {
+        testBorrowLend1.setName("Bob");
+        testBorrowLend1.setBorrowLend(false);
+        assertEquals("Bob", testBorrowLend1.getName());
+        assertFalse(testBorrowLend1.getBorrowLend());
+    }
+
+    @Test
+    void testToJson() {
+        BorrowLend b = new BorrowLend("Henry", 90, "hi", 9, 14, true);
+
+        JSONObject json1 = b.toJson();
+        assertEquals("Henry", json1.getString("Name"));
+        assertEquals(90, json1.getDouble("Amount"));
+        assertEquals("hi", json1.getString("Description"));
+        assertEquals(9, json1.getInt("Month"));
+        assertEquals(14, json1.getInt("Day"));
+        assertEquals(true, json1.getBoolean("BorrowLend"));
     }
 
 }

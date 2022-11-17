@@ -3,19 +3,6 @@ package ui;
 import model.BorrowLend;
 import model.Expense;
 import model.ExpenseList;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.chart.title.LegendTitle;
-import org.jfree.chart.title.TextTitle;
-import org.jfree.chart.ui.HorizontalAlignment;
-import org.jfree.chart.ui.RectangleEdge;
-import org.jfree.chart.ui.RectangleInsets;
-import org.jfree.chart.ui.VerticalAlignment;
 import org.jfree.data.category.DefaultCategoryDataset;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -30,13 +17,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 // Represents the PersonalExpenseApp
-// Allows the user to interact with the GUI to add Expenses and view summaries.
+// Allows the user to interact with the GUI to add Expenses, view a summary table, and graphs.
 public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
     private JList list1;
     private JList list2;
@@ -97,7 +83,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         actionManagerTable =  new ExpenseTableActionManager(questionLabel, testLabelArray, textField, expenseList,
                 tableEditor, summaryTableEditor, screen);
 
-        actionManagerTable.createSummaryGraphsPanel(new int[] {11,10,9}, true);
+        actionManagerTable.createSummaryGraphsPanel(new int[] {11,10,9});
 
         setVisible(true); //allows the contents to be seen, must be at the end of the constructor, or main method
     }
@@ -149,6 +135,8 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         expenseListPanel.add(scrollPaneExpenses, gbc2); //Add Expense List @ row 0
     }
 
+    //EFFECTS: Configures the layout of the JTable
+    //MODIFIES: this
     public void configureJTable() {
         expenseTable.setShowGrid(true);
         expenseTable.setGridColor(new Color(000));
@@ -163,7 +151,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         }
     }
 
-    //EFFECTS: helper method to help add the ComboBox and TextField to the expenseListPanel
+    //EFFECTS: Helper method to help add the ComboBox and TextField to the expenseListPanel
     //MODIFIES: this
     public void helpCreateTextFieldAndComboBox() {
         GridBagConstraints gbc2 = new GridBagConstraints();
@@ -273,6 +261,8 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
 
     }
 
+    //EFFECTS: Creates Load and Save buttons and adds them to the BorrowLendPanel in screen.EAST
+    //MODIFIES: this
     public void addLoadSaveButtons() {
         GridBagConstraints gbc = new GridBagConstraints();
         JPanel loadSave = new JPanel();
@@ -282,9 +272,6 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         JLabel summaryTitle = new JLabel(" ");
         summaryTitle.setSize(250, 50);
         gbc.gridy = 4;
-//        gbc.fill = GridBagConstraints.HORIZONTAL;
-//        gbc.anchor = GridBagConstraints.SOUTH;
-//        gbc.weighty = 5;
         borrowLendPanel.add(summaryTitle, gbc); //Creates a gap between Panels
 
         JButton saveButton = new JButton("Save");
@@ -409,8 +396,8 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         }
     }
 
+    //Effects: loads ExpenseList from file and restores the App, prints error message if file doesn't exist.
     //Modifies: this
-    //Effects: loads ExpenseList from file, prints error message if file doesn't exist.
     private void loadExpenseList() {
         if (loadCount == 0) {
             try {

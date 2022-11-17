@@ -1,0 +1,18 @@
+{
+    "Expense List": [{
+        "Month": 9,
+        "Category": "Dorm",
+        "Description": "blanket",
+        "Price": 90,
+        "Day": 14
+    }],
+    "BorrowLend List": [{
+        "Month": 9,
+        "Description": "hi",
+        "BorrowLend": true,
+        "Amount": 90,
+        "Day": 14,
+        "Name": "Bob"
+    }],
+    "User Name": ""
+}
