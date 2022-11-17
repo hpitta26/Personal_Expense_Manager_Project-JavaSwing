@@ -32,9 +32,9 @@ When I started university I never had any credit cards, or had to manage any mon
 to UBC I had a really hard time doing this, and I still do. I believe that bank applications don't really provide you
 with good tools to manage your expenses, especially if you want to visualize how much
 you are spending on specific categories so that you can pin down what you should cut down on. I currently spend hours
-on this per month and I believe that if there were an application like this one I could save much more time, while still being able
-to visualize my expenses compared to my goals better. Also, I think that letting the user know when they are getting
-close to their spending goal for that category is really important since many times students end 
+on this per month and I believe that if there were an application like this one I could save much more time, while still 
+being able to visualize my expenses compared to my goals better. Also, I think that letting the user know when they are 
+getting close to their spending goal for that category is really important since many times students end 
 up over spending and only realize in a month or longer. So this would definitely help to minimize those occurrences.
 There must be a bunch of students in a similar situation, so I think they could all benefit from this.
 
@@ -52,14 +52,14 @@ There must be a bunch of students in a similar situation, so I think they could 
 - As a user, I want to be able to have the option of loading my Personal Expense List from file when I start the App
 
 ## Instructions for Grader:
-- You can generate the first required event related to adding Xs to a Y by: adding a new Expense through the TextField and the 
-  MonthSummaryTable will automatically update. This is because is this is a Personal Expense App and the user should 
-  always be able to see summary/ comparison Statistics.
-- You can generate the second required event related to adding Xs to a Y by: adding a new Expense through the TextField and the
-  ComparisonGraphs will automatically update. This is because is this is a Personal Expense App and the user should
-  always be able to see summary/ comparison Statistics.
-- You can locate my visual component by: the ComparisonGraphs are always on the left of the screen and will automatically 
-  update when you add new Expenses.
+- You can generate the first required event related to adding Xs to a Y by: adding a new Expense through the TextField 
+  and the MonthSummaryTable will automatically update. This is because is this is a Personal Expense App and the user  
+  should always be able to see summary/ comparison Statistics.
+- You can generate the second required event related to adding Xs to a Y by: adding a new Expense through the TextField 
+  and the ComparisonGraphs will automatically update. This is because is this is a Personal Expense App and the user 
+  should always be able to see summary/ comparison Statistics.
+- You can locate my visual component by: the ComparisonGraphs are always on the left of the screen and will 
+  automatically update when you add new Expenses.
 - You can save the state of my application by: clicking the "Save" button in the bottom right corner.
 - You can reload the state of my application by: clicking the "Load" button in the bottom right corner.
 
