@@ -102,8 +102,8 @@ Month 9 Graph updated.
 
 ## Phase 4: Task 3:
 Reflecting back on my UML diagram I believe that the Model package was designed well, using abstraction to minimize code 
-repetition between the Expense and BorrowLend classes. However, the GUI design could be improved by reducing Code coupling and 
-increasing the Cohesion of the GUI classes. Since they heavily rely on each other changing a piece of code in one class,
-usually leads to the other class performing incorrectly. To solve this more GUI classes should be created and each one
-should handle one specific GUI task, instead of multiple classes sharing the work of performing that same task.
-I believe these changes would improve the overall design of the project.
+repetition between the Expense and BorrowLend classes. However, the GUI design could be improved by reducing Code 
+coupling and increasing the Cohesion of the GUI classes. Since they heavily rely on each other changing a piece of code
+in one class, usually leads to the other class performing incorrectly. To solve this more GUI classes should be created 
+and each one should handle one specific GUI task, instead of multiple classes sharing the work of performing that same 
+task. I believe these changes would improve the overall design of the project.
