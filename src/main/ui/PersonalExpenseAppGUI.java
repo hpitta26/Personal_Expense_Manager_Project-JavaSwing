@@ -93,6 +93,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         actionManagerTable =  new ExpenseTableActionManager(questionLabel, testLabelArray, textField, expenseList,
                 tableEditor, summaryTableEditor, screen);
 
+        //change the months to start with the current month
         actionManagerTable.createSummaryGraphsPanel(new int[] {11,10,9});
 
         setVisible(true); //allows the contents to be seen, must be at the end of the constructor, or main method
@@ -440,7 +441,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
 
     //EFFECTS: runs the application
     public static void main(String[] args) {
-        new PersonalExpenseAppTester();
+        new PersonalExpenseAppGUI();
     }
 
 
