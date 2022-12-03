@@ -1,20 +1,11 @@
 {
-    "Expense List": [
-        {
-            "Month": 11,
-            "Category": "dorm",
-            "Description": "hi",
-            "Price": 40,
-            "Day": 23
-        },
-        {
-            "Month": 11,
-            "Category": "school",
-            "Description": "hello",
-            "Price": 10,
-            "Day": 30
-        }
-    ],
+    "Expense List": [{
+        "Month": 11,
+        "Category": "dorm",
+        "Description": "dorm",
+        "Price": 40,
+        "Day": 23
+    }],
     "BorrowLend List": [
         {
             "Month": 10,
