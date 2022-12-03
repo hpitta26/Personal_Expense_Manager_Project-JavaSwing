@@ -112,7 +112,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
         screen.add(monthPanel, BorderLayout.NORTH); //Add monthPanel to screen.NORTH
     }
 
-    //EFFECTS: Presents the user with the EventLog when they close the App
+    //EFFECTS: Makes the EventLog visible when the user closes the App (default = invisible)
     //MODIFIES: this
     public void openEventLogOnClose() {
         addWindowListener(new WindowAdapter() {

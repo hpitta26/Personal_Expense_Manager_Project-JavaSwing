@@ -3,6 +3,7 @@ package model;
 import java.util.Calendar;
 import java.util.Date;
 
+//Used AlarmSystem's Event Class as a template
 
 /**
  * Represents an alarm system event.
