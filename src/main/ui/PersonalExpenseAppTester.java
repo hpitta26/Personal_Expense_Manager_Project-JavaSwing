@@ -27,7 +27,7 @@ import java.util.List;
 
 // Represents the PersonalExpenseApp
 // Allows the user to interact with the GUI to add Expenses, view a summary table, and graphs.
-public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
+public class PersonalExpenseAppTester extends JFrame implements ActionListener {
     private JList list1;
     private JList list2;
     private ExpenseList expenseList;
@@ -64,7 +64,7 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
     private ExpenseLogView expenseLog;
 
     //EFFECTS: initializes the GUI
-    public PersonalExpenseAppGUI() {
+    public PersonalExpenseAppTester() {
         super("Personal Expense Manager");
         setSize(1250,800); //ExpenseList Panel 730 + Right Panel 250 (prev width 1000)
         //setLocation(1, 1);
@@ -445,3 +445,4 @@ public class PersonalExpenseAppGUI extends JFrame implements ActionListener {
 
 
 }
+

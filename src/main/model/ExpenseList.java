@@ -23,6 +23,7 @@ public class ExpenseList implements Writable {
      * when the ExpenseList is too long, and you do not want to for-loop through the whole List since it will be very
      * slow.
      */
+    private int totalCounter = 0;
 
     public void setUserName(String userName) {
         this.userName = userName;
@@ -49,6 +50,8 @@ public class ExpenseList implements Writable {
         expenseList.add(expense);
         //expenseList.sort(null);
         addDayMonth(expense.getMonth(), expense.getDay());
+        EventLog.getInstance().logEvent(new Event("Expense: " + expense + " "
+                + "added to ExpenseTable"));
     }
 
     /*
@@ -198,6 +201,7 @@ public class ExpenseList implements Writable {
             categoryPercentage[i] = sum;
             sum = 0;
         }
+        EventLog.getInstance().logEvent(new Event("SummaryTable percentages updated for month: " + month));
         return categoryPercentage;
     } //add empty list checker (throws exception when list is empty)
 
@@ -224,8 +228,48 @@ public class ExpenseList implements Writable {
             categoryTotal[i] = sum;
             sum = 0;
         }
+
+        logGetCategoryTotalPerMonthEvent(month);
+
         return categoryTotal;
     } //add empty list checker (throws exception when list is empty)
+
+
+    /*
+     * REQUIRES: 0 < month < 13
+     * MODIFIES:
+     * EFFECTS: Takes in a month and returns a double[] which stores the total spending of each category
+     *          in that month. Uses dayMonthTracker to quickly access the index of the start of the target month.
+     */
+    public List<Expense> getExpenseListForTargetMonth(int month) {
+        expenseList.sort(null);
+        dayMonthTracker.sort(null);
+        List<Expense> targetMonthExpenses = new ArrayList<>();
+        Double thisMonth = (Double)(double)month;
+        Double nextMonth = (Double)(double)(month + 1);
+
+        for (int i = dayMonthTracker.indexOf(thisMonth) + 1; i < dayMonthTracker.indexOf(nextMonth); i++) {
+            targetMonthExpenses.add(expenseList.get(i - month));
+        }
+
+        //logGetCategoryTotalPerMonthEvent(month);
+
+        return targetMonthExpenses;
+    } //add empty list checker (throws exception when list is empty)
+
+
+    public void logGetCategoryTotalPerMonthEvent(int month) {
+        if (totalCounter == 0) {
+            EventLog.getInstance().logEvent(new Event("SummaryTable totals updated for month: " + month));
+            totalCounter++;
+        } else {
+            EventLog.getInstance().logEvent(new Event("Month " + month + " Graph updated."));
+            totalCounter++;
+            if (totalCounter == 4) {
+                totalCounter = 0;
+            }
+        }
+    }
 
 
     /*

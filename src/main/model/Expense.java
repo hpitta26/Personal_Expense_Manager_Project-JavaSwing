@@ -78,6 +78,14 @@ public class Expense extends PersonalExpenseGeneral implements Writable {
         return defaultCategories;
     }
 
+    //Effects: String representation of Expense object
+    @Override
+    public String toString() {
+        String expense = "[" + category + ", $" + getPrice() + ", " + getDescription() + ", " + getMonth() + "/"
+                + getDay() + "]";
+        return expense;
+    }
+
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

@@ -63,3 +63,39 @@ There must be a bunch of students in a similar situation, so I think they could 
 - You can save the state of my application by: clicking the "Save" button in the bottom right corner.
 - You can reload the state of my application by: clicking the "Load" button in the bottom right corner.
 
+## Phase 4: Task 2:
+Fri Dec 02 17:03:22 PST 2022
+Expense: [dorm, $40.0, hi, 11/23] added to ExpenseTable
+
+Fri Dec 02 17:03:22 PST 2022
+SummaryTable percentages updated for month: 11
+
+Fri Dec 02 17:03:22 PST 2022
+SummaryTable totals updated for month: 11
+
+Fri Dec 02 17:03:22 PST 2022
+Month 11 Graph updated.
+
+Fri Dec 02 17:03:22 PST 2022
+Month 10 Graph updated.
+
+Fri Dec 02 17:03:22 PST 2022
+Month 9 Graph updated.
+
+Fri Dec 02 17:03:34 PST 2022
+Expense: [school, $10.0, hello, 11/30] added to ExpenseTable
+
+Fri Dec 02 17:03:34 PST 2022
+SummaryTable percentages updated for month: 11
+
+Fri Dec 02 17:03:34 PST 2022
+SummaryTable totals updated for month: 11
+
+Fri Dec 02 17:03:34 PST 2022
+Month 11 Graph updated.
+
+Fri Dec 02 17:03:34 PST 2022
+Month 10 Graph updated.
+
+Fri Dec 02 17:03:34 PST 2022
+Month 9 Graph updated.

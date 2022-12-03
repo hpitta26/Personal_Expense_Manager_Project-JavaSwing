@@ -1,8 +1,6 @@
 package persistence;
 
-import model.BorrowLend;
-import model.Expense;
-import model.ExpenseList;
+import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.IOException;
@@ -27,6 +25,7 @@ public class JsonReader {
     public ExpenseList read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
+        //EventLog.getInstance().logEvent(new Event("Application has been restored from file: " + source));
         return parseExpenseList(jsonObject);
     }
 

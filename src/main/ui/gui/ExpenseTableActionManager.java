@@ -260,11 +260,12 @@ public class ExpenseTableActionManager {
 
     //EFFECTS: updates the Summary Table and also the Graphs
     //MODIFIES: this
-    public void updateApplication() { //11 rows, 3 columns
+    public void updateApplication() {
         double[] percentages = expenseList.getCategoryPercentagesPerMonth(11);
         double[] totals = expenseList.getCategoryTotalPerMonth(11);
         double total = 0;
 
+        //Summary Table = 11 rows, 3 columns
         for (int i = 0; i < percentages.length; i++) {
             total = total + totals[i];
             summaryTableEditor.setValueAt("$" + totals[i], i, 1);
