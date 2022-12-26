@@ -91,3 +91,7 @@ public class JsonReader {
         expenseList.addBorrowLend(borrowLend);
     }
 }
+
+//create 1 frame for each month (hide each one based on the month you click), and 12 different JFreeCharts (each month
+// holds their corresponding JFreeCharts)
+//Create the JButton Array to hold all the month buttons in the manager class

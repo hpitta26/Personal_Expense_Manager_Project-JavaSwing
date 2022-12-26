@@ -1,5 +1,15 @@
 # Personal Expense Management Application
 
+## Features:
+- Used JSwing for GUI
+- Used Json for serialization
+- Used JUnit for testing
+
+## Current Implementations:
+- Console based App: PersonalExpenseApp
+- GUI without month implementation: PersonalExpenseAppGUI (project presented at the end of the semester)
+- GUI with month implementation: MainJFrameGUI
+
 ## Purpose:
 The purpose of this application is to **track someone's expenses and categorize** those expenses
 so that the user can **visualize** how much they are spending on specific

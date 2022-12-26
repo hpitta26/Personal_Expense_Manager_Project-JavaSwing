@@ -1,0 +1,73 @@
+{
+    "Expense List": [
+        {
+            "Month": 9,
+            "Category": "random",
+            "Description": "hi",
+            "Price": 15,
+            "Day": 1
+        },
+        {
+            "Month": 10,
+            "Category": "restaurant",
+            "Description": "hi",
+            "Price": 20,
+            "Day": 4
+        },
+        {
+            "Month": 11,
+            "Category": "school",
+            "Description": "hi",
+            "Price": 15,
+            "Day": 4
+        },
+        {
+            "Month": 11,
+            "Category": "dorm",
+            "Description": "hi",
+            "Price": 30,
+            "Day": 26
+        },
+        {
+            "Month": 11,
+            "Category": "entertainment",
+            "Description": "hi",
+            "Price": 30,
+            "Day": 27
+        },
+        {
+            "Month": 12,
+            "Category": "entertainment",
+            "Description": "hi",
+            "Price": 100,
+            "Day": 4
+        }
+    ],
+    "BorrowLend List": [
+        {
+            "Month": 10,
+            "Description": "hi",
+            "BorrowLend": true,
+            "Amount": 10,
+            "Day": 17,
+            "Name": "Jack"
+        },
+        {
+            "Month": 10,
+            "Description": "hi",
+            "BorrowLend": false,
+            "Amount": 12,
+            "Day": 17,
+            "Name": "John"
+        },
+        {
+            "Month": 10,
+            "Description": "hi",
+            "BorrowLend": false,
+            "Amount": 20,
+            "Day": 17,
+            "Name": "Mom"
+        }
+    ],
+    "User Name": ""
+}

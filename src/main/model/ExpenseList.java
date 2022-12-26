@@ -185,12 +185,26 @@ public class ExpenseList implements Writable {
      *          the index of the start of the target month.
      */
     public double[] getCategoryPercentagesPerMonth(int month) {
+
         expenseList.sort(null);
         dayMonthTracker.sort(null);
-        double[] categoryPercentage = new double[expenseList.get(0).getDefaultCategories().size()];
+
+        double[] categoryPercentage;
+        try {
+            categoryPercentage = new double[expenseList.get(0).getDefaultCategories().size()];
+        } catch (Exception e) {
+            return new double[] {0,0,0,0,0,0};
+        }
+
+        //double[] categoryPercentage = new double[expenseList.get(0).getDefaultCategories().size()];
         double sum = 0;
         Double thisMonth = (Double)(double)month;
         Double nextMonth = (Double)(double)(month + 1);
+
+//        if ((dayMonthTracker.indexOf(nextMonth) - dayMonthTracker.indexOf(thisMonth) == 0.0)) {
+//            return generateZeroArray();
+//        }
+
         for (int i = 0; i < categoryPercentage.length; i++) {
             for (int j = dayMonthTracker.indexOf(thisMonth) + 1; j < dayMonthTracker.indexOf(nextMonth); j++) {
                 if (categoryComparator(j - month, i)) {
@@ -215,10 +229,22 @@ public class ExpenseList implements Writable {
     public double[] getCategoryTotalPerMonth(int month) {
         expenseList.sort(null);
         dayMonthTracker.sort(null);
-        double[] categoryTotal = new double[expenseList.get(0).getDefaultCategories().size()];
+
+        double[] categoryTotal;
+        try {
+            categoryTotal = new double[expenseList.get(0).getDefaultCategories().size()];
+        } catch (Exception e) {
+            return new double[] {0,0,0,0,0,0};
+        }
+
         double sum = 0;
         Double thisMonth = (Double)(double)month;
         Double nextMonth = (Double)(double)(month + 1);
+
+//        if ((dayMonthTracker.indexOf(nextMonth) - dayMonthTracker.indexOf(thisMonth) == 0.0)) {
+//            return generateZeroArray();
+//        }
+
         for (int i = 0; i < categoryTotal.length; i++) {
             for (int j = dayMonthTracker.indexOf(thisMonth) + 1; j < dayMonthTracker.indexOf(nextMonth); j++) {
                 if (categoryComparator(j - month, i)) {
@@ -236,15 +262,28 @@ public class ExpenseList implements Writable {
 
 
     /*
+     * REQUIRES:
+     * MODIFIES:
+     * EFFECTS: Returns an double[] that only has 0s, length is the # of default categories
+     */
+    public double[] generateZeroArray() {
+        double[] categoryTotal = new double[expenseList.get(0).getDefaultCategories().size()];
+        for (int i = 0; i < categoryTotal.length; i++) {
+            categoryTotal[i] = 0;
+        }
+        return categoryTotal;
+    }
+
+
+    /*
      * REQUIRES: 0 < month < 13
      * MODIFIES:
-     * EFFECTS: Takes in a month and returns a double[] which stores the total spending of each category
-     *          in that month. Uses dayMonthTracker to quickly access the index of the start of the target month.
+     * EFFECTS: Returns a subset of expenseList containing the Expenses in the targetMonth
      */
-    public List<Expense> getExpenseListForTargetMonth(int month) {
+    public ArrayList<Expense> getExpenseListForTargetMonth(int month) {
         expenseList.sort(null);
         dayMonthTracker.sort(null);
-        List<Expense> targetMonthExpenses = new ArrayList<>();
+        ArrayList<Expense> targetMonthExpenses = new ArrayList<>();
         Double thisMonth = (Double)(double)month;
         Double nextMonth = (Double)(double)(month + 1);
 

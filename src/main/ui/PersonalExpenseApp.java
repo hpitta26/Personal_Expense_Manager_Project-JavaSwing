@@ -536,6 +536,12 @@ public class PersonalExpenseApp {
         helpRemoveObject(false);
     }
 
+    //Modifies:
+    //Effects: Runs the PersonalExpenseApp
+    public static void main(String[] args) {
+        new PersonalExpenseApp();
+    }
+
 }
 
 //Ideas:

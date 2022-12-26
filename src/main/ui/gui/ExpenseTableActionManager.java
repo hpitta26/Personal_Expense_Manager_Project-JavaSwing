@@ -23,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.text.NumberFormat;
 
-//Class used to manage the GUI's Graphs, Expense Table, and Summary Table
+//Class used by PersonalExpenseAppGUI to manage the GUI's Graphs, Expense Table, and Summary Table
 public class ExpenseTableActionManager {
 
     //How many times the User has clicked the Button
