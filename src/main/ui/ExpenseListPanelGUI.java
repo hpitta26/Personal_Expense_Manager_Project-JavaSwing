@@ -169,7 +169,7 @@ public class ExpenseListPanelGUI implements ActionListener {
         JLabel descriptionOutputTest = new JLabel("Description: ");
         JLabel priceOutputTest = new JLabel("Price: ");
         JLabel categoryOutputTest = new JLabel("Category: ");
-        JLabel monthOutputTest = new JLabel("Month: Only 11");
+        JLabel monthOutputTest = new JLabel("Month: ");
 
         labelStyleSetter(dayOutputTest);
         labelStyleSetter(descriptionOutputTest);

@@ -2,6 +2,7 @@ package ui.gui;
 
 import model.ExpenseList;
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 
 //Class used by SummaryPanelGUI to manage the GUI's summaryTable
@@ -34,9 +35,14 @@ public class SummaryPanelActionManager {
     //EFFECTS: updates the Summary Table
     //MODIFIES: this
     public void updateSummaryTable(int currentMonth) {
+        List<String> defaultCategories = expenseList.getExpenseList().get(0).getDefaultCategories();
         double[] percentages = expenseList.getCategoryPercentagesPerMonth(currentMonth);
         double[] totals = expenseList.getCategoryTotalPerMonth(currentMonth);
         double total = 0;
+
+        for (int i = 0; i < defaultCategories.size(); i++) {
+            summaryTableEditor.setValueAt(defaultCategories.get(i), i, 0);
+        }
 
         //Summary Table = 11 rows, 3 columns
         for (int i = 0; i < percentages.length; i++) {

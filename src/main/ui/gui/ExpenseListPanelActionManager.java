@@ -234,7 +234,7 @@ public class ExpenseListPanelActionManager {
         outputTestLabels[1].setText("Description: ");
         outputTestLabels[2].setText("Price: ");
         outputTestLabels[3].setText("Category: ");
-        outputTestLabels[4].setText("Month: Only 11");
+        outputTestLabels[4].setText("Month: ");
 
     }
 

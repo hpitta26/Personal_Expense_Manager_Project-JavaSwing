@@ -1,9 +1,14 @@
-# Personal Expense Management Application
+# Personal Expense Management Desktop App
+
+## Current Project
+
+
 
 ## Features:
 - Used JSwing for GUI
-- Used Json for serialization
+- Used JSON for serialization
 - Used JUnit for testing
+- JFreeChart for graph visualization
 
 ## Current Implementations:
 - Console based App: PersonalExpenseApp
