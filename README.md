@@ -11,7 +11,7 @@
 - JFreeChart for graph visualization
 
 ## Current Implementations:
-- Console based App: PersonalExpenseApp
+- Console App: PersonalExpenseApp
 - GUI without month implementation: PersonalExpenseAppGUI (project presented at the end of the semester)
 - GUI with month implementation: MainJFrameGUI
 
