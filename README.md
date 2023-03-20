@@ -1,6 +1,6 @@
 # Personal Expense Management Desktop App
 
-## Current Project
+## Current Project:
 
 <img src="https://github.com/hpitta26/Personal_Expense_Manager_Project-JSwing/blob/main/Personal-Expense-Manager.png" alt="Personal Expense Manager Image" width=50%>
 
@@ -11,9 +11,9 @@
 - JFreeChart for graph visualization
 
 ## Current Implementations:
-- Console App: PersonalExpenseApp
-- GUI without month implementation: PersonalExpenseAppGUI (project presented at the end of the semester)
-- GUI with month implementation: MainJFrameGUI
+- **Console App:** PersonalExpenseApp
+- **GUI without month implementation:** PersonalExpenseAppGUI (project presented at the end of the semester)
+- **GUI with month implementation:** MainJFrameGUI
 
 ## Purpose:
 The purpose of this application is to **track someone's expenses and categorize** those expenses
