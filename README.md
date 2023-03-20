@@ -2,7 +2,7 @@
 
 ## Current Project
 
-
+<img src="https://github.com/hpitta26/Personal_Expense_Manager_Project-JSwing/blob/main/Personal-Expense-Manager.png" alt="Personal Expense Manager Image" width=50%>
 
 ## Features:
 - Used JSwing for GUI
