@@ -5,9 +5,9 @@
 <img src="https://github.com/hpitta26/Personal_Expense_Manager_Project-JSwing/blob/main/Personal-Expense-Manager.png" alt="Personal Expense Manager Image" width=50%>
 
 ## Features:
-- Used JSwing for GUI
+- Used Java Swing for GUI
 - Used JSON for serialization
-- Used JUnit for testing
+- Used JUnit during test driven development
 - JFreeChart for graph visualization
 
 ## Current Implementations:
