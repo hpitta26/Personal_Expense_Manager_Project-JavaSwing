@@ -7,7 +7,7 @@
 ## Features:
 - Used Java Swing for GUI
 - Used JSON for serialization
-- Used JUnit during test driven development
+- Used JUnit during Test-driven development
 - JFreeChart for graph visualization
 
 ## Current Implementations:
